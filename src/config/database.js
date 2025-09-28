@@ -3,11 +3,11 @@ const mongoose = require('mongoose');
 const connectDB = async () => {
   try {
     // Configurar URI de conexión con autenticación
-    const mongoURI = process.env.MONGODB_URI || 'mongodb://orderapp:orderapp123@localhost:27017/orderdb?authSource=orderdb';
+    const mongoURI = process.env.MONGODB_URI || 'mongodb://admin:admin123@localhost:27017/orderdb?authSource=admin';
     
     // Configurar opciones de conexión
     const options = {
-      authSource: 'orderdb', // Base de datos donde están las credenciales
+      authSource: 'admin', // Base de datos donde están las credenciales de root
       retryWrites: true,
       w: 'majority'
     };

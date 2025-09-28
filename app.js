@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const connectDB = require('./src/config/database');
 const orderRoutes = require('./src/routes/orderRoutes');
+const eurekaClient = require('./src/config/eureka');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -53,4 +54,22 @@ app.use((err, req, res, next) => {
 app.listen(PORT, () => {
   console.log(`Order Management Microservice running on port ${PORT}`);
   console.log(`Health check: http://localhost:${PORT}/health`);
+  
+  // Registrar el servicio en Eureka
+  eurekaClient.start(error => {
+    if (error) {
+      console.error('Eureka registration failed:', error);
+    } else {
+      console.log('Service registered with Eureka successfully');
+    }
+  });
+});
+
+// Graceful shutdown
+process.on('SIGINT', () => {
+  console.log('Shutting down gracefully...');
+  eurekaClient.stop(() => {
+    console.log('Eureka client stopped');
+    process.exit(0);
+  });
 });
